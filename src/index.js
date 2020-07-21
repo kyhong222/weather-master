@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const fetch = require('node-fetch');
 const axios = require('axios');
 
 const APIKey = process.env.APIKey;
