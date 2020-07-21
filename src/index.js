@@ -1,18 +1,28 @@
-const fetch = require('node-fetch');
+require('dotenv').config();
 
-const APIKey = "fee325a9153b5176b2610a2096004088";
+const fetch = require('node-fetch');
+const axios = require('axios');
+
+const APIKey = process.env.APIKey;
 const latitude = 37.245682;
 const longitude = 127.074471;
 
 function getWeather(lat, lon){
-    fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}`
-    ).then(function(response){
-        return response.json();
-    }).then(function(data){
-        console.log("온도는", data.main.temp, "입니다.");
-        console.log("날씨는", data.weather[0].main, "입니다.");
+    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}`;
+
+    return axios.get(url).then(function(response){
+        console.log(response.data);
+        return response.data;
     })
 }
 
-const currentWeather = getWeather(latitude, longitude);
+async function printWeather(){
+    let weatherData = await getWeather(latitude, longitude);
+    // console.log(weatherData);
+
+    console.log(weatherData.name +"의 날씨는 " + String(weatherData.weather[0].main) + " 입니다.");
+    console.log(weatherData.name +"의 기온은 " + String(Math.floor(weatherData.main.temp - 273)) + " 입니다.");
+}
+
+printWeather();
+
